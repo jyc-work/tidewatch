@@ -123,10 +123,14 @@ class EastmoneySource:
         self.last_host = _HOSTS[0]
 
     # ---------------- 全市场个股 ----------------
-    def all_stocks(self, *, page_size: int = 100) -> list[StockQuote]:
-        """批量拉全市场个股快照（约 5900 只，60 页）。
+    def all_stocks(self, *, page_size: int = 100,
+                   max_stocks: int | None = 800) -> list[StockQuote]:
+        """按成交额降序批量拉个股快照。
 
-        注意：`fs` 参数含 `+`（东财的分隔符），**不能交给 requests 编码**，
+        `max_stocks=None` 表示全市场（约 5900 只 / 60 页）——
+        **实测：全量连打会触发东财限流（IP 被封）**，所以默认只抓成交额靠前的部分。
+
+        注意：`fs` 参数含 `+`（东财分隔符），**不能交给 requests 编码**，
         否则 `+` → `%2B`，东财会拒绝。所以 query 手工拼接。
         """
         from urllib.parse import urlencode
@@ -136,7 +140,7 @@ class EastmoneySource:
         while True:
             qs = urlencode({
                 "pn": page, "pz": page_size, "po": 1, "np": 1,
-                "fltt": 2, "invt": 2, "fid": "f3",
+                "fltt": 2, "invt": 2, "fid": "f6",   # f6 = 按成交额降序
             })
             path = (f"/api/qt/clist/get?{qs}&fs={_STOCK_FS}&fields={_STOCK_FIELDS}")
             f = self.http.get_with_fallback(_QUOTE_HOSTS, path)
@@ -158,6 +162,8 @@ class EastmoneySource:
                 ))
             total = int(data.get("total") or 0)
             if not diff or page * page_size >= total:
+                break
+            if max_stocks is not None and len(out) >= max_stocks:
                 break
             page += 1
         return out

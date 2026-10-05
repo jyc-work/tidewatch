@@ -31,7 +31,13 @@ def run_stocks(
     *,
     trade_date: str | None = None,
     force: bool = False,
+    max_stocks: int = 800,
 ) -> dict:
+    """抓个股快照。
+
+    `max_stocks=800`（默认）：按成交额降序只抓前 800（≈ 8 页）。
+    **不要改成 None（全市场 60 页）**——实测会触发东财限流封 IP（DESIGN §4.7）。
+    """
     provider = "eastmoney"
     target = resolve_target_date(trade_date)
     if not cal.is_trading_day(date.fromisoformat(target)):
@@ -47,7 +53,7 @@ def run_stocks(
     src = EastmoneySource(http)
     written = 0
     try:
-        quotes = src.all_stocks()
+        quotes = src.all_stocks(max_stocks=max_stocks)
         avail = now_beijing().isoformat()
         with store.transaction():
             for q in quotes:
