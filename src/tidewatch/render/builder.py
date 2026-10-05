@@ -60,10 +60,14 @@ def _num(v: float | None, nd: int = 2) -> str:
 
 
 class SiteBuilder:
-    def __init__(self, store: Store, out_dir, *, base_url: str = "https://localhost") -> None:
+    def __init__(self, store: Store, out_dir, *, base_url: str = "https://localhost",
+                 base_path: str = "") -> None:
         self.store = store
         self.out = Path(out_dir)
         self.base_url = base_url.rstrip("/")
+        # GitHub Pages 项目站点挂在 /<repo>/ 子路径下，需带上前缀
+        bp = (base_path or "").strip()
+        self.base_path = "" if bp in ("", "/") else "/" + bp.strip("/")
         self.env = Environment(
             loader=FileSystemLoader(str(_TEMPLATES)),
             autoescape=select_autoescape(["html"]),
@@ -96,7 +100,7 @@ class SiteBuilder:
 
     # ---------------- URL / i18n ----------------
     def _url(self, locale: str, path: str) -> str:
-        return f"{self.base_url}{locale_prefix(locale)}{path}"
+        return f"{self.base_url}{self.base_path}{locale_prefix(locale)}{path}"
 
     def _ctx(self, locale: str, i18n: I18n, *, title: str, desc: str, path: str,
              trade_date: str, locales: tuple[str, ...]) -> dict:
@@ -109,8 +113,9 @@ class SiteBuilder:
             "hreflangs": [
                 {"hreflang": loc, "href": self._url(loc, path)} for loc in locales
             ],
-            "alt_url": f"{locale_prefix(other)}{path}",
-            "prefix": locale_prefix(locale),
+            "alt_url": f"{self.base_path}{locale_prefix(other)}{path}",
+            "prefix": f"{self.base_path}{locale_prefix(locale)}",
+            "base_path": self.base_path,
             "t": i18n.flat,
             "trade_date": trade_date,
         }
@@ -200,6 +205,10 @@ class SiteBuilder:
             shutil.rmtree(self.out)
         (self.out / "assets").mkdir(parents=True, exist_ok=True)
         shutil.copy2(_ASSETS / "style.css", self.out / "assets" / "style.css")
+        # GitHub Pages 需要 .nojekyll，否则下划线开头的文件被忽略
+        (self.out / ".nojekyll").write_text("", encoding="utf-8")
+        # 根目录重定向（项目站点入口）
+        (self.out / "index.html").exists() or None
 
         pages = 0
         for loc in locales:

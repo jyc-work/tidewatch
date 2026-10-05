@@ -116,7 +116,7 @@ def cmd_render(args) -> int:
     d = resolve_target_date(args.date)
     locales = SUPPORTED if args.lang == "all" else (args.lang,)
     out_new = resolve(args.out)
-    builder = SiteBuilder(store, out_new, base_url=args.base_url)
+    builder = SiteBuilder(store, out_new, base_url=args.base_url, base_path=args.base_path)
     res = builder.build(d, locales)
     print(f"built {res['pages']} pages -> {res['out']} (locales={','.join(locales)})")
 
@@ -162,6 +162,7 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--lang", default="all", choices=["all", *SUPPORTED])
     b.add_argument("--out", default="dist.new", help="输出目录（默认 dist.new）")
     b.add_argument("--base-url", default="https://localhost", help="canonical/hreflang 用的基 URL")
+    b.add_argument("--base-path", default="", help="子路径前缀（GitHub Pages 项目站点用 /<repo>）")
     b.add_argument("--publish", action="store_true", help="构建后原子发布到 dist/")
     b.add_argument("--min-pages", type=int, default=6, help="发布守门的页面数下限")
     b.set_defaults(func=cmd_render)
