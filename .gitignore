@@ -1,0 +1,15 @@
+# 运行产物（不进 git）
+data/
+dist/
+dist.new/
+dist.old/
+logs/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+# 本地凭据
+.env
+metrics.json

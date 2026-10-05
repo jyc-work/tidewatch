@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ t["radar.title"] }}</h1>
+<p class="subtitle">{{ t["radar.subtitle"] }}</p>
+
+{% if ladder %}
+<div class="card">
+  <h2>{{ t["radar.ladder"] }}</h2>
+  <div class="metrics">
+    {% for l in ladder %}
+    <div class="metric">
+      <div class="k">{{ l.ladder }}{{ t["radar.ladder_unit"] }}</div>
+      <div class="v">{{ l.n }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% for pool_key, pool in pools.items() %}
+<div class="card">
+  <h2>{{ t["radar." + pool_key] }} <span class="subtitle" style="display:inline">({{ pool|length }})</span></h2>
+  {% if pool %}
+  <table class="data">
+    <thead><tr>
+      <th>{{ t["radar.col.name"] }}</th>
+      <th>{{ t["radar.col.code"] }}</th>
+      <th>{{ t["radar.col.pct"] }}</th>
+      <th>{{ t["radar.col.amount"] }}</th>
+      <th>{{ t["radar.col.turnover"] }}</th>
+      {% if pool_key == "up" %}<th>{{ t["radar.col.ladder"] }}</th>{% endif %}
+      <th>{{ t["radar.col.industry"] }}</th>
+    </tr></thead>
+    <tbody>
+    {% for s in pool %}
+      <tr>
+        <td>{{ s.name }}</td>
+        <td class="code">{{ s.code }}</td>
+        <td class="num {{ s.cls }}">{{ s.pct_text }}</td>
+        <td class="num">{{ s.amount_text }}</td>
+        <td class="num">{{ s.turnover_text }}</td>
+        {% if pool_key == "up" %}<td class="num">{{ s.ladder or "-" }}</td>{% endif %}
+        <td>{{ s.industry }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="subtitle">{{ t["empty"] }}</p>
+  {% endif %}
+</div>
+{% endfor %}
+
+<p class="subtitle">{{ t["radar.note"] }}</p>
+{% endblock %}

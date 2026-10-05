@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ t["index.title"] }}</h1>
+<p class="lead">{{ t["index.lead"] }}</p>
+<div class="card">
+  <a href="{{ prefix }}/sectors/"><strong>{{ t["index.enter"] }} →</strong></a>
+</div>
+{% endblock %}

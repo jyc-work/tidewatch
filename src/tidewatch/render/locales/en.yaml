@@ -1,0 +1,83 @@
+lang: en
+site:
+  name: Tidewatch
+  tagline: China A-Share Market Atlas
+nav:
+  sectors: Sectors
+  people: Smart Money
+  radar: Flow Radar
+  lab: Lab
+index:
+  title: China A-Share Market Atlas
+  lead: Sector performance over 1 / 5 / 20 trading days with four-stage momentum, updated after each close.
+  enter: Open Sector Atlas
+sectors:
+  title: Sector Atlas
+  subtitle: Sorted by turnover · updated after each trading day's close
+  col:
+    code: Code
+    name: Sector
+    close: Close
+    ret1: 1D
+    ret5: 5D
+    ret20: 20D
+    stage: Stage
+    amount: Turnover (100M CNY)
+  detail:
+    back: ← Back to Sector Atlas
+    metrics: Multi-window Performance
+    amount: Turnover
+    stage: Stage
+    members: Constituents
+    nomembers: Constituent data is not wired up yet (P1).
+empty: No data
+stage:
+  持续领涨: Sustained Leadership
+  高位回落: Pullback from Highs
+  超跌反弹: Oversold Rebound
+  持续走弱: Sustained Weakness
+footer:
+  snapshot: Snapshot date
+  source: Source — public market data, snapshot after close
+  disclaimer: This site only presents curated public data and is not investment advice.
+  lang: Language
+  switch: 中文
+
+people:
+  title: Hot-Money Seats
+  subtitle: Daily dragon-tiger list seat ranking · from public disclosures
+  col:
+    seat: Seat
+    buy: Buy (100M)
+    sell: Sell (100M)
+    net: Net (100M)
+    records: Appearances
+  note: A seat is not a specific person; aliases come from community discussion, unverified
+  detail:
+    back: ← Back to seats
+    today: Today
+    buy: Buy
+    sell: Sell
+    records: Appearances
+    stocks: Related Stocks
+    nostocks: No stock detail yet
+    nomapping: This seat is not yet in the community alias mapping
+
+radar:
+  title: Flow Radar
+  subtitle: Limit-up / broken / limit-down / strong pools · from public snapshots
+  ladder: Limit-Up Ladder
+  ladder_unit: boards
+  up: Limit-Up Pool
+  break: Broken Board Pool
+  down: Limit-Down Pool
+  strong: Strong Pool
+  col:
+    name: Name
+    code: Code
+    pct: Change
+    amount: Turnover (100M)
+    turnover: Turnover Rate
+    ladder: Boards
+    industry: Industry
+  note: This is a limit-up/down snapshot, not classic money flow; not investment advice

@@ -1,0 +1,476 @@
+# 席位 → 游资/机构 映射表（v0.3）
+#
+# ┌─────────────────────────────────────────────────────────────────────┐
+# │ ⚠️ 重要声明（需同步展示在网站上，不得删除）                            │
+# │                                                                     │
+# │ 1. 本表是「公开龙虎榜席位」的社区归纳口径，不代表特定自然人，         │
+# │    也不能证明某笔交易由谁决定。                                       │
+# │ 2. alias（游资别名）来自市场公开讨论，未经任何官方证实，               │
+# │    不同版本差异很大，仅供研究参考，不构成投资建议。                     │
+# │ 3. 同一席位可能被多个主体共用；席位可能变更、注销或易主。               │
+# │ 4. classification（分类）是「行为特征」推断，不等于机构/个人身份。      │
+# └─────────────────────────────────────────────────────────────────────┘
+#
+# ============================ 证据分层（v0.2 起） ============================
+#   activity_evidence  measured | none
+#       只证明「该席位在指定区间出现过，且有买卖金额」。
+#       它【不能】证明这是谁、也不能证明它属于哪一类主体。
+#
+#   identity_evidence  unknown | claimed | verified
+#       是否证实指向特定主体。未证实一律 unknown。
+#
+#   classification     hot_money | quant_like | foreign | northbound
+#       行为特征分类（不是身份）。必须配 method + confidence。
+#
+# ============================ operatedept_code（v0.3 补齐） ============================
+#   席位主键用东财 OPERATEDEPT_CODE（名称会因券商合并/更名变化）。
+#   来源：RPT_BILLBOARD_DAILYDETAILS*（龙虎榜 240 席位）
+#       + RPT_OPERATEDEPT_ACTIVE（活跃营业部 48 席位），窗口 2026-06..09。
+#   未匹配 = 该席位在观察窗口内未上榜，保留 null，待后续补。
+
+meta:
+  version: "0.3"
+  generated: "2026-10-05"
+  measured_source: "eastmoney:RPT_OPERATEDEPT_ACTIVE"
+  measured_window: "2026-06-01..2026-09-30"
+  alias_source: "public community discussion (unverified)"
+  classifier_version: "1.0"
+  code_source: "eastmoney:RPT_BILLBOARD_DAILYDETAILS* + RPT_OPERATEDEPT_ACTIVE (2026-06..09)"
+  code_coverage: "27/33"
+  code_matched_at: "2026-10-05"
+
+disclaimer: >-
+  本表内容为公开龙虎榜席位的社区归纳口径，不代表特定自然人，亦不能证明交易决策主体；
+  alias 未经官方证实；classification 为行为特征推断，非身份认定。仅供研究，不构成投资建议。
+
+seats:
+  # ---- A1. 实测所得（activity_evidence: measured）----
+  - operatedept_code: "10026937"
+    name: 国泰海通证券股份有限公司武汉紫阳东路证券营业部
+    alias: 紫阳东路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: medium
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [大票, 趋势]
+    stats: {buy_yi: 115.52, sell_yi: 28.89, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01&sort=TOTAL_BUYAMT"
+    note: 国泰君安与海通合并后的存续名称。买卖比约 4:1。
+
+  - operatedept_code: "10477800"
+    name: 开源证券股份有限公司西安太华路证券营业部
+    alias: 开源西安太华路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: medium
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [打板, 高频]
+    stats: {buy_yi: 155.58, sell_yi: 77.21, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01&sort=TOTAL_BUYAMT"
+    note: 开源证券西安系，市场长期关注的游资通道。
+
+  - operatedept_code: "10025390"
+    name: 国泰海通证券股份有限公司北京知春路证券营业部
+    alias: 北京知春路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [题材, 中盘]
+    stats: {buy_yi: 41.90, sell_yi: 27.60, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10025054"
+    name: 国泰海通证券股份有限公司南京太平南路证券营业部
+    alias: 南京太平南路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [打板, 小盘]
+    stats: {buy_yi: 29.31, sell_yi: 10.84, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10467900"
+    name: 国泰海通证券股份有限公司上海自贸试验区第二分公司
+    alias: 上海自贸区二分公司
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [趋势]
+    stats: {buy_yi: 59.00, sell_yi: 5.29, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+    note: 买卖比约 11:1，结构偏单向买入。
+
+  - operatedept_code: "10134445"
+    name: 国泰海通证券股份有限公司上海松江区中山东路证券营业部
+    alias: 松江中山东路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [小盘]
+    stats: {buy_yi: 24.78, sell_yi: 2.32, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10025298"
+    name: 中国银河证券股份有限公司南京洪武路证券营业部
+    alias: 南京洪武路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [单向买入]
+    stats: {buy_yi: 15.11, sell_yi: 0.00, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10046704"
+    name: 中信证券股份有限公司杭州延安路证券营业部
+    alias: 杭州延安路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [题材]
+    stats: {buy_yi: 12.40, sell_yi: 5.36, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10128380"
+    name: 招商证券股份有限公司深圳深南中路证券营业部
+    alias: 深圳深南中路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [题材]
+    stats: {buy_yi: 11.49, sell_yi: 0.16, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10046745"
+    name: 开源证券股份有限公司西安西大街证券营业部
+    alias: 开源西安西大街
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [打板]
+    stats: {buy_yi: 29.64, sell_yi: 8.62, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10023739"
+    name: 东方证券股份有限公司上海浦东新区源深路证券营业部
+    alias: 上海源深路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [趋势]
+    stats: {buy_yi: 7.22, sell_yi: 3.81, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10456753"
+    name: 国泰海通证券股份有限公司湛江万豪世家证券营业部
+    alias: 湛江万豪世家
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [小盘]
+    stats: {buy_yi: 8.99, sell_yi: 9.29, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10027067"
+    name: 华安证券股份有限公司上海浦东南路证券营业部
+    alias: 上海浦东南路
+    alias_source: community
+    classification: hot_money
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [题材]
+    stats: {buy_yi: 29.02, sell_yi: 30.51, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  # ---- A2. 市场公开知名席位（activity_evidence: none，尚未实测）----
+  - operatedept_code: null
+    name: 国泰君安证券股份有限公司上海江苏路证券营业部
+    alias: 上海江苏路
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: none
+    identity_evidence: unknown
+    tags: [大票, 趋势]
+    note: 市场常与某知名游资关联，未证实；合并后可能已更名，需核对。
+
+  - operatedept_code: null
+    name: 华鑫证券有限责任公司宁波分公司
+    alias: 华鑫宁波
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: none
+    identity_evidence: unknown
+    tags: [打板, 高频]
+    note: 市场长期讨论的知名打板席位，未证实。
+
+  - operatedept_code: "10274545"
+    name: 华鑫证券有限责任公司上海分公司
+    alias: 华鑫上海分公司
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [打板]
+    note: 未证实。
+
+  - operatedept_code: null
+    name: 光大证券股份有限公司佛山季华六路证券营业部
+    alias: 佛山季华六路
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: none
+    identity_evidence: unknown
+    tags: [波段]
+    note: 市场俗称“佛山系”相关，未证实。
+
+  - operatedept_code: null
+    name: 长江证券股份有限公司佛山普澜二路证券营业部
+    alias: 佛山普澜二路
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: none
+    identity_evidence: unknown
+    tags: [波段]
+    note: 未证实。
+
+  - operatedept_code: null
+    name: 财通证券股份有限公司绍兴人民中路证券营业部
+    alias: 绍兴人民中路
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: none
+    identity_evidence: unknown
+    tags: [题材]
+    note: 未证实。
+
+  - operatedept_code: null
+    name: 华福证券有限责任公司厦门湖滨南路证券营业部
+    alias: 厦门湖滨南路
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: none
+    identity_evidence: unknown
+    tags: [题材]
+    note: 未证实。
+
+  - operatedept_code: "10030457"
+    name: 中国银河证券股份有限公司厦门美湖路证券营业部
+    alias: 厦门美湖路
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [题材]
+    note: 未证实。
+
+  - operatedept_code: "10142874"
+    name: 华泰证券股份有限公司深圳益田路荣超商务中心证券营业部
+    alias: 深圳益田路荣超
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [趋势]
+    note: 未证实。
+
+  - operatedept_code: "10495103"
+    name: 东方财富证券股份有限公司拉萨团结路第二证券营业部
+    alias: 拉萨团结路二部
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [散户聚集, 高频]
+    note: 市场常称“拉萨军团”，高频小额，更多被视为散户/量化混同通道。
+
+  - operatedept_code: "10472087"
+    name: 东方财富证券股份有限公司拉萨东环路第二证券营业部
+    alias: 拉萨东环路二部
+    alias_source: community
+    classification: hot_money
+    classification_method: community
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [散户聚集, 高频]
+    note: 同上。
+
+  # ---- B. 量化/机构行为特征席位（quant_like）----
+  - operatedept_code: "10135341"
+    name: 中信证券股份有限公司上海分公司
+    alias: 中信上海分公司
+    alias_source: community
+    classification: quant_like
+    classification_method: heuristic
+    confidence: medium
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [高频, 买卖均衡]
+    stats: {buy_yi: 642.88, sell_yi: 580.24, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01&sort=TOTAL_BUYAMT"
+    note: 规模居前、买卖近乎持平，符合机构/量化通道特征；但无法据此认定具体主体。
+
+  - operatedept_code: "10088113"
+    name: 中国国际金融股份有限公司上海分公司
+    alias: 中金上海分公司
+    alias_source: community
+    classification: quant_like
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [高频]
+    stats: {buy_yi: 126.87, sell_yi: 104.06, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10004865"
+    name: 国泰海通证券股份有限公司
+    alias: 国泰海通总部
+    alias_source: community
+    classification: quant_like
+    classification_method: heuristic
+    confidence: low
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [总部席位]
+    stats: {buy_yi: 74.84, sell_yi: 60.90, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+    note: “总部”席位通常为机构专用通道，非普通营业部。
+
+  - operatedept_code: "10028716"
+    name: 中信建投证券股份有限公司上海营口路证券营业部
+    alias: 上海营口路
+    alias_source: community
+    classification: quant_like
+    classification_method: heuristic
+    confidence: medium
+    activity_evidence: measured
+    identity_evidence: unknown
+    tags: [高频, 小额分仓]
+    stats: {buy_yi: 1.58, sell_yi: 0.86, window: "2026-06..09", onlist: 32}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01&sort=BUYER_APPEAR_NUM"
+    note: 32 次上榜但仅 1.58 亿，单次金额小、频次高，符合量化分仓特征。
+
+  # ---- C. 外资 / 北向 ----
+  - operatedept_code: "10000399618"
+    name: 高盛(中国)证券有限责任公司上海浦东新区世纪大道证券营业部
+    alias: 高盛上海世纪大道
+    alias_source: community
+    classification: foreign
+    classification_method: heuristic
+    confidence: high
+    activity_evidence: measured
+    identity_evidence: claimed
+    stats: {buy_yi: 699.63, sell_yi: 532.82, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01&sort=TOTAL_BUYAMT"
+
+  - operatedept_code: "10110478"
+    name: 瑞银证券有限责任公司上海花园石桥路证券营业部
+    alias: 瑞银上海花园石桥路
+    alias_source: community
+    classification: foreign
+    classification_method: heuristic
+    confidence: high
+    activity_evidence: measured
+    identity_evidence: claimed
+    stats: {buy_yi: 304.63, sell_yi: 284.10, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01&sort=TOTAL_BUYAMT"
+
+  - operatedept_code: "10000100571"
+    name: 摩根大通证券(中国)有限公司上海银城中路证券营业部
+    alias: 摩根大通上海银城中路
+    alias_source: community
+    classification: foreign
+    classification_method: heuristic
+    confidence: high
+    activity_evidence: measured
+    identity_evidence: claimed
+    stats: {buy_yi: 79.99, sell_yi: 42.89, window: "2026-06..09"}
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+
+  - operatedept_code: "10434470"
+    name: 沪股通专用
+    alias: 沪股通
+    alias_source: official
+    classification: northbound
+    classification_method: measured_stats
+    confidence: high
+    activity_evidence: measured
+    identity_evidence: verified
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+    note: 北向资金通道，非单一主体。
+
+  - operatedept_code: "10634757"
+    name: 深股通专用
+    alias: 深股通
+    alias_source: official
+    classification: northbound
+    classification_method: measured_stats
+    confidence: high
+    activity_evidence: measured
+    identity_evidence: verified
+    source_query: "RPT_OPERATEDEPT_ACTIVE?filter=ONLIST_DATE>=2026-06-01"
+    note: 北向资金通道，非单一主体。
+
+# =====================================================================
+# D. 待办
+# =====================================================================
+# TODO(P2): 补齐剩余 6 条（上海江苏路/华鑫宁波/佛山两席/绍兴人民中路/厦门湖滨南路）
+#           ——需扩大龙虎榜窗口到 12 个月，或查这些席位的当前状态（可能已更名/注销）
+# TODO(P2): 用龙虎榜席位直接名称匹配，自动发现新的知名游资（当前仅覆盖社区已知的 33 个）
+# TODO(P2): 增加"席位近期战绩"（上榜后 T+1/T+5 平均收益），需接行情 + 回归测试

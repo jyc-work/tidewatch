@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="subtitle"><a href="{{ prefix }}/sectors/">{{ t["sectors.detail.back"] }}</a></p>
+<h1>{{ s.name }}</h1>
+<p class="subtitle">{{ s.code }}{% if s.stage_text != "-" %} · {{ s.stage_text }}{% endif %}</p>
+
+<div class="card">
+  <div class="metrics">
+    <div class="metric"><div class="k">{{ t["sectors.col.ret1"] }}</div>
+      <div class="v {{ s.cls1 }}">{{ s.ret1_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["sectors.col.ret5"] }}</div>
+      <div class="v {{ s.cls5 }}">{{ s.ret5_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["sectors.col.ret20"] }}</div>
+      <div class="v {{ s.cls20 }}">{{ s.ret20_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["sectors.col.close"] }}</div>
+      <div class="v">{{ s.close_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["sectors.detail.amount"] }}</div>
+      <div class="v">{{ s.amount_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["sectors.detail.stage"] }}</div>
+      <div class="v"><span class="badge {{ s.stage_cls }}">{{ s.stage_text }}</span></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>{{ t["sectors.detail.members"] }}</h2>
+  <p class="subtitle">{{ t["sectors.detail.nomembers"] }}</p>
+</div>
+{% endblock %}

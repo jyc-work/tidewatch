@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page_title }} · {{ t["site.name"] }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="canonical" href="{{ canonical }}">
+{% for alt in hreflangs %}<link rel="alternate" hreflang="{{ alt.hreflang }}" href="{{ alt.href }}">
+{% endfor %}
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="{{ prefix }}/">{{ t["site.name"] }}<span>{{ t["site.tagline"] }}</span></a>
+  <nav class="main">
+    <a href="{{ prefix }}/sectors/" class="active">{{ t["nav.sectors"] }}</a>
+    <a href="{{ prefix }}/people/">{{ t["nav.people"] }}</a>
+    <a href="{{ prefix }}/radar/">{{ t["nav.radar"] }}</a>
+  </nav>
+  <span class="spacer"></span>
+  <a class="lang-switch" href="{{ alt_url }}">{{ t["footer.switch"] }}</a>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site">
+  <div>{{ t["footer.source"] }}</div>
+  <div>{{ t["footer.snapshot"] }}: {{ trade_date }}</div>
+  <div class="disc">{{ t["footer.disclaimer"] }}</div>
+</footer>
+</body>
+</html>

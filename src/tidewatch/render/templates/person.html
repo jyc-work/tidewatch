@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="subtitle"><a href="{{ prefix }}/people/">{{ t["people.detail.back"] }}</a></p>
+<h1>{{ s.name }}</h1>
+<p class="subtitle">{{ s.full_name }}{% if s.alias %} · {{ s.code }}{% endif %}</p>
+
+<div class="card">
+  <div class="metrics">
+    <div class="metric"><div class="k">{{ t["people.detail.buy"] }}</div>
+      <div class="v">{{ s.buy_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["people.detail.sell"] }}</div>
+      <div class="v">{{ s.sell_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["people.detail.records"] }}</div>
+      <div class="v">{{ s.records }}</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>{{ t["people.detail.stocks"] }}</h2>
+  {% if s.stocks %}
+  <table class="data">
+    <thead><tr>
+      <th>{{ t["sectors.col.code"] }}</th>
+      <th>{{ t["people.col.buy"] }}</th>
+      <th>{{ t["people.col.sell"] }}</th>
+    </tr></thead>
+    <tbody>
+    {% for st in s.stocks %}
+      <tr><td class="code">{{ st.stock_code }}</td>
+        <td class="num">{{ st.buy_text }}</td>
+        <td class="num">{{ st.sell_text }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="subtitle">{{ t["people.detail.nostocks"] }}</p>
+  {% endif %}
+  <p class="subtitle" style="margin-top:14px">{{ t["people.note"] }}</p>
+</div>
+{% endblock %}

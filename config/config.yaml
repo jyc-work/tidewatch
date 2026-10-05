@@ -1,0 +1,41 @@
+# tidewatch 配置
+# 路径均为相对项目根。
+
+paths:
+  data: data
+  raw: data/raw
+  db: data/tidewatch.db
+  fixtures: tests/fixtures
+
+# 访问纪律（DESIGN §4.7）——东财对高频请求会临时封 IP，这些值不是可选项。
+fetch:
+  min_interval: 1.0        # 同域名最小间隔（秒）
+  jitter: 0.3              # 随机抖动上限（秒）
+  retries: 4               # 指数退避最大重试次数
+  timeout: 15
+  daily_max_requests: 600  # 当日请求上限，超出告警
+
+# 多域名轮换（实测：同一接口不同域名可用性不一致，DESIGN §4.3）
+domains:
+  eastmoney_quote:         # 行情/列表
+    - push2.eastmoney.com
+    - push2delay.eastmoney.com
+  eastmoney_hist:          # 历史 K 线
+    - push2his.eastmoney.com
+  eastmoney_datacenter:    # 龙虎榜等
+    - datacenter-web.eastmoney.com
+  ths:                     # 同花顺（备用源，已实测可用）
+    - d.10jqka.com.cn
+
+sectors:
+  industry_fs: "m:90+t:2+f:!50"
+  concept_fs: "m:90+t:3+f:!50"
+  concept_top_n: 100       # 概念板块仅渲染成交额 Top 100（DESIGN §5.4）
+
+# P0 小样本：先跑通 3 个行业板块（DESIGN §10）
+# 注：同花顺 K 线代码与东财不同——行业用 881xxx，概念用 885xxx（尚未映射，P1）。
+sample:
+  industries: ["881101", "881121", "881273"]   # 种植业与林业 / 半导体 / 白酒
+  concepts: []                                  # 概念代码体系待确认（P1）
+  stocks: ["600519", "000001", "000002", "600036", "601318",
+           "000858", "002594", "300750", "600030", "601899"]

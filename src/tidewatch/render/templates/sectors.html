@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ t["sectors.title"] }}</h1>
+<p class="subtitle">{{ t["sectors.subtitle"] }}</p>
+
+{% if sectors %}
+<table class="data">
+  <thead>
+    <tr>
+      <th>{{ t["sectors.col.name"] }}</th>
+      <th>{{ t["sectors.col.code"] }}</th>
+      <th>{{ t["sectors.col.close"] }}</th>
+      <th>{{ t["sectors.col.ret1"] }}</th>
+      <th>{{ t["sectors.col.ret5"] }}</th>
+      <th>{{ t["sectors.col.ret20"] }}</th>
+      <th>{{ t["sectors.col.stage"] }}</th>
+      <th>{{ t["sectors.col.amount"] }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for s in sectors %}
+    <tr>
+      <td><a href="{{ prefix }}/sectors/{{ s.code }}/">{{ s.name }}</a></td>
+      <td class="code">{{ s.code }}</td>
+      <td class="num">{{ s.close_text }}</td>
+      <td class="num {{ s.cls1 }}">{{ s.ret1_text }}</td>
+      <td class="num {{ s.cls5 }}">{{ s.ret5_text }}</td>
+      <td class="num {{ s.cls20 }}">{{ s.ret20_text }}</td>
+      <td><span class="badge {{ s.stage_cls }}">{{ s.stage_text }}</span></td>
+      <td class="num">{{ s.amount_text }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="subtitle">{{ t["empty"] }}</p>
+{% endif %}
+{% endblock %}

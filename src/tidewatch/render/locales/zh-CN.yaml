@@ -1,0 +1,83 @@
+lang: zh-CN
+site:
+  name: 观潮
+  tagline: A 股市场图谱
+nav:
+  sectors: 板块图谱
+  people: 聪明钱
+  radar: 资金雷达
+  lab: 实验室
+index:
+  title: A 股市场图谱
+  lead: 全市场行业板块的当日 / 5 日 / 20 日表现与强弱四段，每个交易日收盘后更新。
+  enter: 进入板块图谱
+sectors:
+  title: 板块图谱
+  subtitle: 按成交额排序 · 每个交易日收盘后更新
+  col:
+    code: 代码
+    name: 名称
+    close: 收盘
+    ret1: 当日
+    ret5: 5 日
+    ret20: 20 日
+    stage: 强弱四段
+    amount: 成交额(亿)
+  detail:
+    back: ← 返回板块图谱
+    metrics: 多窗口表现
+    amount: 成交额
+    stage: 强弱四段
+    members: 成分股
+    nomembers: 该板块的成分股数据尚未接入（P1）。
+empty: 暂无数据
+stage:
+  持续领涨: 持续领涨
+  高位回落: 高位回落
+  超跌反弹: 超跌反弹
+  持续走弱: 持续走弱
+footer:
+  snapshot: 快照交易日
+  source: 数据来源：公开行情接口，收盘后快照
+  disclaimer: 本站仅展示公开数据的整理结果，不构成投资建议。
+  lang: 语言
+  switch: English
+
+people:
+  title: 游资席位
+  subtitle: 当日龙虎榜席位买卖排行 · 数据来自公开披露
+  col:
+    seat: 席位
+    buy: 买入(亿)
+    sell: 卖出(亿)
+    net: 净额(亿)
+    records: 上榜次数
+  note: 席位≠特定自然人；别名来自社区讨论，未经证实
+  detail:
+    back: ← 返回游资席位
+    today: 当日
+    buy: 买入
+    sell: 卖出
+    records: 上榜次数
+    stocks: 相关个股
+    nostocks: 暂无个股明细
+    nomapping: 该席位尚未纳入社区别名映射
+
+radar:
+  title: 资金雷达
+  subtitle: 涨停 / 炸板 / 跌停 / 强势股池 · 来自公开行情快照
+  ladder: 连板梯队
+  ladder_unit: 板
+  up: 涨停池
+  break: 炸板池
+  down: 跌停池
+  strong: 强势股池
+  col:
+    name: 名称
+    code: 代码
+    pct: 涨跌幅
+    amount: 成交额(亿)
+    turnover: 换手率
+    ladder: 连板
+    industry: 行业
+  note: 口径为涨停/炸板/跌停快照，非传统资金流；不构成投资建议

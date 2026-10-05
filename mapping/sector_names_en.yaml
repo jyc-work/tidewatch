@@ -1,0 +1,235 @@
+# 同花顺行业板块中英译名表
+#
+# 用途：英文页 (/en/) 的板块名。缺失时回退中文（i18n.sector_name）。
+# 来源：同花顺行业分类（q.10jqka.com.cn/thshy/），代码 881xxx，共 90 个。
+#
+# 维护约定：
+#   - en 用行业通用译名，首字母大写，非专有名词不缩写
+#   - 与东财板块的翻译工作分开（代码体系不同）
+
+# 农业
+"881101": {zh: "种植业与林业", en: "Planting & Forestry"}
+"881102": {zh: "养殖业", en: "Livestock & Aquaculture"}
+"881103": {zh: "农产品加工", en: "Agricultural Processing"}
+"881263": {zh: "农化制品", en: "Agrochemicals"}
+
+# 能源与资源
+"881105": {zh: "煤炭开采加工", en: "Coal Mining & Processing"}
+"881107": {zh: "油气开采及服务", en: "Oil & Gas Extraction & Services"}
+"881180": {zh: "石油加工贸易", en: "Oil Refining & Trading"}
+"881145": {zh: "电力", en: "Power & Utilities"}
+"881146": {zh: "燃气", en: "Gas Utilities"}
+
+# 化工与材料
+"881108": {zh: "化学原料", en: "Chemical Materials"}
+"881109": {zh: "化学制品", en: "Chemical Products"}
+"881172": {zh: "电子化学品", en: "Electronic Chemicals"}
+"881264": {zh: "化学纤维", en: "Chemical Fibers"}
+"881265": {zh: "塑料制品", en: "Plastics"}
+"881266": {zh: "橡胶制品", en: "Rubber Products"}
+"881112": {zh: "钢铁", en: "Steel"}
+"881114": {zh: "金属新材料", en: "Advanced Metal Materials"}
+"881167": {zh: "非金属材料", en: "Non-metallic Materials"}
+"881168": {zh: "工业金属", en: "Industrial Metals"}
+"881169": {zh: "贵金属", en: "Precious Metals"}
+"881170": {zh: "小金属", en: "Minor Metals"}
+"881267": {zh: "能源金属", en: "Energy Metals"}
+
+# 电子与半导体
+"881121": {zh: "半导体", en: "Semiconductors"}
+"881122": {zh: "光学光电子", en: "Optics & Optoelectronics"}
+"881123": {zh: "其他电子", en: "Other Electronics"}
+"881124": {zh: "消费电子", en: "Consumer Electronics"}
+"881270": {zh: "元件", en: "Electronic Components"}
+
+# 设备制造
+"881117": {zh: "通用设备", en: "General Equipment"}
+"881118": {zh: "专用设备", en: "Specialized Equipment"}
+"881171": {zh: "自动化设备", en: "Automation Equipment"}
+"881268": {zh: "工程机械", en: "Construction Machinery"}
+"881269": {zh: "轨交设备", en: "Rail Transit Equipment"}
+"881277": {zh: "电机", en: "Electric Motors"}
+"881278": {zh: "电网设备", en: "Power Grid Equipment"}
+"881279": {zh: "光伏设备", en: "Solar Equipment"}
+"881280": {zh: "风电设备", en: "Wind Power Equipment"}
+"881281": {zh: "电池", en: "Batteries"}
+"881282": {zh: "其他电源设备", en: "Other Power Equipment"}
+"881284": {zh: "环保设备", en: "Environmental Equipment"}
+
+# 军工
+"881166": {zh: "军工装备", en: "Defense Equipment"}
+"881276": {zh: "军工电子", en: "Defense Electronics"}
+
+# 汽车
+"881125": {zh: "汽车整车", en: "Automobiles"}
+"881126": {zh: "汽车零部件", en: "Auto Parts"}
+"881128": {zh: "汽车服务及其他", en: "Auto Services & Others"}
+
+# 通信与计算机
+"881129": {zh: "通信设备", en: "Communication Equipment"}
+"881162": {zh: "通信服务", en: "Telecom Services"}
+"881130": {zh: "计算机设备", en: "Computer Hardware"}
+"881271": {zh: "IT服务", en: "IT Services"}
+"881272": {zh: "软件开发", en: "Software"}
+
+# 消费
+"881131": {zh: "白色家电", en: "White Goods"}
+"881132": {zh: "黑色家电", en: "Black Goods"}
+"881173": {zh: "小家电", en: "Small Appliances"}
+"881174": {zh: "厨卫电器", en: "Kitchen & Bath Appliances"}
+"881139": {zh: "家居用品", en: "Home Furnishings"}
+"881133": {zh: "饮料制造", en: "Beverages"}
+"881134": {zh: "食品加工制造", en: "Food Processing"}
+"881273": {zh: "白酒", en: "Baijiu (Liquor)"}
+"881182": {zh: "美容护理", en: "Beauty & Personal Care"}
+
+# 纺织服装与轻工
+"881135": {zh: "纺织制造", en: "Textiles"}
+"881136": {zh: "服装家纺", en: "Apparel & Home Textiles"}
+"881137": {zh: "造纸", en: "Paper"}
+"881138": {zh: "包装印刷", en: "Packaging & Printing"}
+
+# 医药
+"881140": {zh: "化学制药", en: "Chemical Pharmaceuticals"}
+"881141": {zh: "中药", en: "Traditional Chinese Medicine"}
+"881142": {zh: "生物制品", en: "Biological Products"}
+"881143": {zh: "医药商业", en: "Pharmaceutical Distribution"}
+"881144": {zh: "医疗器械", en: "Medical Devices"}
+"881175": {zh: "医疗服务", en: "Healthcare Services"}
+
+# 交通运输
+"881148": {zh: "港口航运", en: "Ports & Shipping"}
+"881149": {zh: "公路铁路运输", en: "Road & Rail Transport"}
+"881151": {zh: "机场航运", en: "Airports & Airlines"}
+"881152": {zh: "物流", en: "Logistics"}
+
+# 地产建筑
+"881153": {zh: "房地产", en: "Real Estate"}
+"881115": {zh: "建筑材料", en: "Building Materials"}
+"881116": {zh: "建筑装饰", en: "Construction & Decoration"}
+
+# 金融
+"881155": {zh: "银行", en: "Banks"}
+"881156": {zh: "保险", en: "Insurance"}
+"881157": {zh: "证券", en: "Securities & Brokerage"}
+"881283": {zh: "多元金融", en: "Diversified Financials"}
+
+# 商贸与社服
+"881158": {zh: "零售", en: "Retail"}
+"881159": {zh: "贸易", en: "Trading"}
+"881177": {zh: "互联网电商", en: "Internet & E-commerce"}
+"881160": {zh: "旅游及酒店", en: "Travel & Hotels"}
+"881178": {zh: "教育", en: "Education"}
+"881179": {zh: "其他社会服务", en: "Other Social Services"}
+
+# 传媒
+"881164": {zh: "文化传媒", en: "Media & Culture"}
+"881274": {zh: "影视院线", en: "Film & Cinema"}
+"881275": {zh: "游戏", en: "Gaming"}
+
+# 环保与综合
+"881181": {zh: "环境治理", en: "Environmental Services"}
+"881165": {zh: "综合", en: "Conglomerates"}
+
+# ============================================================
+# 概念板块（同花顺 gnSection，885xxx/886xxx，共 98 个）
+# 由 gnSection 的 platecode 提取，K 线经 /v6/line/bk_{code}/01/last.js 验证
+# ============================================================
+"886109": {zh: "2026一季报预增", en: "2026 Q1 Earnings Pre-Announcement"}
+"885537": {zh: "3D打印", en: "3D Printing"}
+"886037": {zh: "6G概念", en: "6G"}
+"886071": {zh: "AI PC", en: "AI PC"}
+"886070": {zh: "AI手机", en: "AI Phones"}
+"886085": {zh: "AI眼镜", en: "AI Glasses"}
+"886068": {zh: "AI视频", en: "AI Video"}
+"885927": {zh: "CRO概念", en: "CRO (Contract Research)"}
+"886031": {zh: "ChatGPT概念", en: "ChatGPT Concept"}
+"885998": {zh: "F5G概念", en: "F5G"}
+"885925": {zh: "MCU芯片", en: "MCU Chips"}
+"886112": {zh: "MLCC概念", en: "MLCC"}
+"886046": {zh: "MR(混合现实)", en: "Mixed Reality"}
+"885987": {zh: "MicroLED概念", en: "MicroLED"}
+"885875": {zh: "MiniLED", en: "Mini LED"}
+"885738": {zh: "OLED", en: "OLED"}
+"886020": {zh: "PET铜箔", en: "PET Copper Foil"}
+"886017": {zh: "Web3.0", en: "Web3.0"}
+"885940": {zh: "WiFi 6", en: "Wi-Fi 6"}
+"886102": {zh: "中国AI 50", en: "China AI 50"}
+"885741": {zh: "中字头股票", en: "Central SOEs"}
+"885897": {zh: "中芯国际概念", en: "SMIC Concept"}
+"885856": {zh: "仿制药一致性评价", en: "Generic Drug Consistency Evaluation"}
+"885934": {zh: "元宇宙", en: "Metaverse"}
+"885864": {zh: "光刻胶", en: "Photoresist"}
+"886084": {zh: "光纤概念", en: "Optical Fiber"}
+"886051": {zh: "减肥药", en: "Weight-Loss Drugs"}
+"886008": {zh: "减速器", en: "Speed Reducers"}
+"885944": {zh: "动力电池回收", en: "Battery Recycling"}
+"885661": {zh: "医药电商", en: "Online Pharma Retail"}
+"886091": {zh: "华为手机", en: "Huawei Phones"}
+"886058": {zh: "华为昇腾", en: "Huawei Ascend"}
+"885843": {zh: "华为海思概念股", en: "Huawei HiSilicon"}
+"885980": {zh: "华为鲲鹏", en: "Huawei Kunpeng"}
+"885620": {zh: "参股券商", en: "Brokerage Stakes"}
+"886077": {zh: "合成生物", en: "Synthetic Biology"}
+"886045": {zh: "同花顺中特估100", en: "THS China SOE Valuation 100"}
+"886096": {zh: "同花顺新质50", en: "THS New Quality 50"}
+"886082": {zh: "同花顺果指数", en: "THS Apple Index"}
+"885916": {zh: "同花顺漂亮100", en: "THS Blue Chip 100"}
+"885844": {zh: "国产操作系统", en: "Domestic OS"}
+"885893": {zh: "国家大基金持股", en: "National IC Fund Holdings"}
+"885480": {zh: "在线教育", en: "Online Education"}
+"886062": {zh: "多模态AI", en: "Multimodal AI"}
+"885566": {zh: "大飞机", en: "Large Aircraft"}
+"886043": {zh: "太赫兹", en: "Terahertz"}
+"885423": {zh: "安防", en: "Security & Surveillance"}
+"885543": {zh: "家用电器", en: "Home Appliances"}
+"885786": {zh: "富士康概念", en: "Foxconn Concept"}
+"886098": {zh: "小红书概念", en: "Xiaohongshu Concept"}
+"885552": {zh: "小金属概念", en: "Minor Metals"}
+"885930": {zh: "工业母机", en: "Machine Tools"}
+"885918": {zh: "快手概念", en: "Kuaishou Concept"}
+"885842": {zh: "数字乡村", en: "Digital Village"}
+"885942": {zh: "数据安全", en: "Data Security"}
+"885418": {zh: "文化传媒概念", en: "Media & Culture"}
+"885598": {zh: "新股与次新股", en: "New & Recent IPOs"}
+"885868": {zh: "无线耳机", en: "Wireless Earbuds"}
+"886059": {zh: "智能座舱", en: "Smart Cockpit"}
+"885771": {zh: "智能音箱", en: "Smart Speakers"}
+"886090": {zh: "智谱AI", en: "Zhipu AI"}
+"885809": {zh: "柔性屏(折叠屏)", en: "Foldable Displays"}
+"886035": {zh: "毫米波雷达", en: "Millimeter-Wave Radar"}
+"885999": {zh: "汽车热管理", en: "Auto Thermal Management"}
+"885945": {zh: "汽车芯片", en: "Automotive Chips"}
+"885905": {zh: "注册制次新股", en: "Registration-Based IPOs"}
+"885879": {zh: "流感", en: "Influenza"}
+"885915": {zh: "物业管理", en: "Property Management"}
+"885425": {zh: "特高压", en: "Ultra-High Voltage"}
+"885787": {zh: "独角兽概念", en: "Unicorns"}
+"885994": {zh: "猴痘概念", en: "Mpox"}
+"886111": {zh: "玻璃基板", en: "Glass Substrates"}
+"885845": {zh: "生物疫苗", en: "Vaccines"}
+"885838": {zh: "眼科医疗", en: "Ophthalmic Care"}
+"886060": {zh: "短剧游戏", en: "Short-Drama Gaming"}
+"885907": {zh: "科创次新股", en: "STAR Market IPOs"}
+"885758": {zh: "租售同权", en: "Equal Housing Rights"}
+"885908": {zh: "第三代半导体", en: "Third-Gen Semiconductors"}
+"886050": {zh: "算力租赁", en: "Computing Power Leasing"}
+"885769": {zh: "细胞免疫治疗", en: "Cellular Immunotherapy"}
+"885876": {zh: "网红经济", en: "Influencer Economy"}
+"885459": {zh: "网络安全", en: "Cybersecurity"}
+"885989": {zh: "肝炎概念", en: "Hepatitis"}
+"885884": {zh: "航空发动机", en: "Aero Engines"}
+"886048": {zh: "英伟达概念", en: "NVIDIA Concept"}
+"885376": {zh: "苹果概念", en: "Apple Concept"}
+"885950": {zh: "虚拟数字人", en: "Virtual Humans"}
+"885760": {zh: "装配式建筑", en: "Prefab Construction"}
+"885663": {zh: "证金持股", en: "CSF Holdings"}
+"885761": {zh: "超级品牌", en: "Super Brands"}
+"885886": {zh: "超级电容", en: "Supercapacitors"}
+"885966": {zh: "跨境支付(CIPS)", en: "Cross-Border Payment (CIPS)"}
+"885909": {zh: "辅助生殖", en: "Assisted Reproduction"}
+"885955": {zh: "重组蛋白", en: "Recombinant Proteins"}
+"885730": {zh: "量子科技", en: "Quantum Technology"}
+"886073": {zh: "铜缆高速连接", en: "High-Speed Copper Cables"}
+"885832": {zh: "长三角一体化", en: "Yangtze Delta Integration"}
+"886001": {zh: "高压快充", en: "High-Voltage Fast Charging"}

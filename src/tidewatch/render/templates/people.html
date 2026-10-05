@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ t["people.title"] }}</h1>
+<p class="subtitle">{{ t["people.subtitle"] }}</p>
+
+{% if seats %}
+<table class="data">
+  <thead>
+    <tr>
+      <th>{{ t["people.col.seat"] }}</th>
+      <th>{{ t["people.col.buy"] }}</th>
+      <th>{{ t["people.col.sell"] }}</th>
+      <th>{{ t["people.col.net"] }}</th>
+      <th>{{ t["people.col.records"] }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for s in seats %}
+    <tr>
+      <td><a href="{{ prefix }}/people/{{ s.code }}/">{{ s.name }}</a></td>
+      <td class="num">{{ s.buy_text }}</td>
+      <td class="num">{{ s.sell_text }}</td>
+      <td class="num {{ s.net_cls }}">{{ s.net_text }}</td>
+      <td class="num">{{ s.records }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="subtitle" style="margin-top:14px">{{ t["people.note"] }}</p>
+{% else %}
+<p class="subtitle">{{ t["empty"] }}</p>
+{% endif %}
+{% endblock %}
