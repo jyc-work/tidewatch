@@ -93,3 +93,20 @@ footer.site {
   padding: 22px 28px; color: var(--fg-mute); font-size: 12.5px; line-height: 1.9;
 }
 footer.site .disc { color: var(--fg-dim); }
+
+/* 覆盖范围标注 */
+.scope {
+  color: var(--fg-mute);
+  font-size: 13px;
+  margin: -12px 0 20px;
+  padding: 8px 12px;
+  border-left: 2px solid var(--line);
+  background: var(--bg-soft);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* 表格排序 */
+table.data th[data-dir] { color: var(--fg); }
+table.data th[data-dir="asc"]:hover,
+table.data th[data-dir="desc"]:hover { color: var(--fg); }
+.sort-mark { color: var(--accent); font-size: 11px; margin-left: 2px; }

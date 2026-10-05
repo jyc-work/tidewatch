@@ -2,6 +2,14 @@
 {% block content %}
 <h1>{{ t["sectors.title"] }}</h1>
 <p class="subtitle">{{ t["sectors.subtitle"] }}</p>
+{% if scope %}
+<p class="scope">
+  {{ t["sectors.scope_label"] }}：
+  {{ t["sectors.scope_industry"] }} {{ scope.industry }}
+  · {{ t["sectors.scope_concept"] }} {{ scope.concept }}{{ t["sectors.scope_concept_note"] }}
+  · {{ t["sectors.scope_total"] }} {{ scope.total }}
+</p>
+{% endif %}
 
 {% if sectors %}
 <table class="data">

@@ -61,13 +61,18 @@ def _num(v: float | None, nd: int = 2) -> str:
 
 class SiteBuilder:
     def __init__(self, store: Store, out_dir, *, base_url: str = "https://localhost",
-                 base_path: str = "") -> None:
+                 base_path: str = "", top_stocks: int = 300,
+                 show_lang_switch: bool = False, concept_top_n: int = 100) -> None:
         self.store = store
         self.out = Path(out_dir)
         self.base_url = base_url.rstrip("/")
         # GitHub Pages 项目站点挂在 /<repo>/ 子路径下，需带上前缀
         bp = (base_path or "").strip()
         self.base_path = "" if bp in ("", "/") else "/" + bp.strip("/")
+        self.top_stocks = top_stocks
+        self.concept_top_n = concept_top_n
+        # 暂时屏蔽英文切换入口（页面仍然生成，SEO hreflang 保留）
+        self.show_lang_switch = show_lang_switch
         self.env = Environment(
             loader=FileSystemLoader(str(_TEMPLATES)),
             autoescape=select_autoescape(["html"]),
@@ -103,7 +108,7 @@ class SiteBuilder:
         return f"{self.base_url}{self.base_path}{locale_prefix(locale)}{path}"
 
     def _ctx(self, locale: str, i18n: I18n, *, title: str, desc: str, path: str,
-             trade_date: str, locales: tuple[str, ...]) -> dict:
+             trade_date: str, locales: tuple[str, ...], current: str = "") -> dict:
         other = "en" if locale == DEFAULT else DEFAULT
         return {
             "lang": locale,
@@ -118,6 +123,9 @@ class SiteBuilder:
             "base_path": self.base_path,
             "t": i18n.flat,
             "trade_date": trade_date,
+            "current": current,
+            # 暂时屏蔽语言切换（用户要求）；hreflang 仍保留以便 SEO
+            "show_lang_switch": self.show_lang_switch,
         }
 
     # ---------------- 游资席位 ----------------
@@ -195,6 +203,39 @@ class SiteBuilder:
         ]
         return pools, ladder
 
+    # ---------------- 个股 ----------------
+    def _stock_rows(self, trade_date: str, top_n: int) -> list[dict]:
+        rows = self.store.top_stocks(trade_date, top_n)
+        out = []
+        for r in rows:
+            pe, pb = r["pe_ttm"], r["pb"]
+            out.append({
+                "code": r["stock_code"],
+                "name": r["name"] or r["stock_code"],
+                "close_text": f"{(r['close'] or 0):.2f}",
+                "pct_text": f'{(r["pct_chg"] or 0):+.2f}%',
+                "cls": _cls(r["pct_chg"]),
+                "amount_text": f"{(r['amount'] or 0) / 1e8:.2f}",
+                "turnover_text": f"{(r['turnover'] or 0):.2f}%",
+                "pe_text": f"{pe:.1f}" if pe else "-",
+                "pb_text": f"{pb:.2f}" if pb else "-",
+                "mcap_text": f"{(r['total_mcap'] or 0) / 1e8:.0f}",
+            })
+        return out
+
+    def _sector_scope(self) -> dict:
+        """板块覆盖范围（界面需标注全量还是 Top N）。"""
+        rows = self.store.conn.execute(
+            "SELECT category, COUNT(*) n FROM sector GROUP BY category"
+        ).fetchall()
+        by_cat = {r["category"]: r["n"] for r in rows}
+        return {
+            "industry": by_cat.get("industry", 0),
+            "concept": by_cat.get("concept", 0),
+            "total": sum(by_cat.values()),
+            "concept_top_n": self.concept_top_n,
+        }
+
     def _render(self, template: str, out_path: Path, ctx: dict) -> None:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(self.env.get_template(template).render(**ctx), encoding="utf-8")
@@ -204,7 +245,8 @@ class SiteBuilder:
         if self.out.exists():
             shutil.rmtree(self.out)
         (self.out / "assets").mkdir(parents=True, exist_ok=True)
-        shutil.copy2(_ASSETS / "style.css", self.out / "assets" / "style.css")
+        for asset in _ASSETS.glob("*"):
+            shutil.copy2(asset, self.out / "assets" / asset.name)
         # GitHub Pages 需要 .nojekyll，否则下划线开头的文件被忽略
         (self.out / ".nojekyll").write_text("", encoding="utf-8")
         # 根目录重定向（项目站点入口）
@@ -224,14 +266,15 @@ class SiteBuilder:
         # 首页
         self._render("index.html", base / "index.html", self._ctx(
             locale, i18n, title=i18n.t("index.title"), desc=i18n.t("index.lead"),
-            path="/", trade_date=trade_date, locales=locales))
+            path="/", trade_date=trade_date, locales=locales, current=""))
         n += 1
 
         # 列表页
         ctx = self._ctx(locale, i18n, title=i18n.t("sectors.title"),
                         desc=i18n.t("sectors.subtitle"), path="/sectors/",
-                        trade_date=trade_date, locales=locales)
+                        trade_date=trade_date, locales=locales, current="sectors")
         ctx["sectors"] = rows
+        ctx["scope"] = self._sector_scope()
         self._render("sectors.html", base / "sectors" / "index.html", ctx)
         n += 1
 
@@ -240,7 +283,7 @@ class SiteBuilder:
             dctx = self._ctx(locale, i18n, title=s["name"],
                              desc=f'{s["name"]} {s["ret1_text"]} / {s["ret5_text"]} / {s["ret20_text"]}',
                              path=f'/sectors/{s["code"]}/', trade_date=trade_date,
-                             locales=locales)
+                             locales=locales, current="sectors")
             dctx["s"] = s
             self._render("sector.html", base / "sectors" / s["code"] / "index.html", dctx)
             n += 1
@@ -249,7 +292,7 @@ class SiteBuilder:
         prows = self._people_rows(trade_date, i18n)
         pctx = self._ctx(locale, i18n, title=i18n.t("people.title"),
                          desc=i18n.t("people.subtitle"), path="/people/",
-                         trade_date=trade_date, locales=locales)
+                         trade_date=trade_date, locales=locales, current="people")
         pctx["seats"] = prows
         self._render("people.html", base / "people" / "index.html", pctx)
         n += 1
@@ -258,7 +301,7 @@ class SiteBuilder:
             dctx = self._ctx(locale, i18n, title=s["name"],
                              desc=f'{s["name"]} buy {s["buy_text"]} / sell {s["sell_text"]}',
                              path=f'/people/{s["code"]}/', trade_date=trade_date,
-                             locales=locales)
+                             locales=locales, current="people")
             s["stocks"] = self._person_stocks(s["code"], trade_date)
             dctx["s"] = s
             self._render("person.html", base / "people" / s["code"] / "index.html", dctx)
@@ -268,9 +311,26 @@ class SiteBuilder:
         pools, ladder = self._radar_data(trade_date)
         rctx = self._ctx(locale, i18n, title=i18n.t("radar.title"),
                          desc=i18n.t("radar.subtitle"), path="/radar/",
-                         trade_date=trade_date, locales=locales)
+                         trade_date=trade_date, locales=locales, current="radar")
         rctx["pools"] = pools
         rctx["ladder"] = ladder
         self._render("radar.html", base / "radar" / "index.html", rctx)
         n += 1
+
+        # 个股研究
+        srows = self._stock_rows(trade_date, self.top_stocks)
+        sctx = self._ctx(locale, i18n, title=i18n.t("stocks.title"),
+                         desc=i18n.t("stocks.subtitle"), path="/stocks/",
+                         trade_date=trade_date, locales=locales, current="stocks")
+        sctx["stocks"] = srows
+        self._render("stocks.html", base / "stocks" / "index.html", sctx)
+        n += 1
+        for s in srows:
+            dctx = self._ctx(locale, i18n, title=f'{s["name"]} {s["code"]}',
+                             desc=f'{s["name"]} {s["pct_text"]} PE:{s["pe_text"]}',
+                             path=f'/stocks/{s["code"]}/', trade_date=trade_date,
+                             locales=locales, current="stocks")
+            dctx["s"] = s
+            self._render("stock.html", base / "stocks" / s["code"] / "index.html", dctx)
+            n += 1
         return n

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ t["stocks.title"] }}</h1>
+<p class="subtitle">{{ t["stocks.subtitle"] }}</p>
+
+{% if stocks %}
+<table class="data">
+  <thead>
+    <tr>
+      <th>{{ t["stocks.col.name"] }}</th>
+      <th>{{ t["stocks.col.code"] }}</th>
+      <th>{{ t["stocks.col.close"] }}</th>
+      <th>{{ t["stocks.col.pct"] }}</th>
+      <th>{{ t["stocks.col.amount"] }}</th>
+      <th>{{ t["stocks.col.turnover"] }}</th>
+      <th>{{ t["stocks.col.pe"] }}</th>
+      <th>{{ t["stocks.col.pb"] }}</th>
+      <th>{{ t["stocks.col.mcap"] }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for s in stocks %}
+    <tr>
+      <td><a href="{{ prefix }}/stocks/{{ s.code }}/">{{ s.name }}</a></td>
+      <td class="code">{{ s.code }}</td>
+      <td class="num">{{ s.close_text }}</td>
+      <td class="num {{ s.cls }}">{{ s.pct_text }}</td>
+      <td class="num">{{ s.amount_text }}</td>
+      <td class="num">{{ s.turnover_text }}</td>
+      <td class="num">{{ s.pe_text }}</td>
+      <td class="num">{{ s.pb_text }}</td>
+      <td class="num">{{ s.mcap_text }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="subtitle" style="margin-top:14px">{{ t["stocks.note"] }}</p>
+{% else %}
+<p class="subtitle">{{ t["empty"] }}</p>
+{% endif %}
+{% endblock %}

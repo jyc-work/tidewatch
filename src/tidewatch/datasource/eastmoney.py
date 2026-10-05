@@ -19,6 +19,9 @@ from ..http import HttpClient
 
 _HOSTS = ["datacenter-web.eastmoney.com"]
 _PATH = "/api/data/v1/get"
+# 行情/列表接口在 push2 域名（不是 datacenter-web）
+# 实测：clist 在 push2delay 上会 RemoteDisconnected，故不列它
+_QUOTE_HOSTS = ["push2.eastmoney.com"]
 _PAGE_SIZE = 500
 _REPORT = {
     "buy": "RPT_BILLBOARD_DAILYDETAILSBUY",
@@ -64,6 +67,22 @@ class PoolStock:
     industry: str           # 所属行业（hybk）
 
 
+@dataclass
+class StockQuote:
+    """个股快照（全市场批量）。"""
+
+    stock_code: str
+    name: str
+    close: float
+    pct_chg: float
+    amount: float
+    turnover: float
+    pe_ttm: float | None
+    pb: float | None
+    total_mcap: float
+    float_mcap: float
+
+
 # 涨跌停池接口（push2ex，2026-10-05 实测）
 # 注意：不同池需要不同的 sort 字段，用错会返回空数据
 _POOL_HOSTS = ["push2ex.eastmoney.com"]
@@ -83,12 +102,65 @@ def _i(v, default: int = 0) -> int:
         return default
 
 
+# 全市场股票（沪深主板 + 创业板 + 科创板 + 北交所）
+_STOCK_FS = "m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23,m:0+t:81+s:2048"
+_STOCK_FIELDS = "f12,f14,f2,f3,f5,f6,f8,f9,f23,f20,f21,f115"
+
+
+def _num_or_none(v) -> float | None:
+    """东财用 '-' 表示无值（如亏损股 PE）。"""
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
 class EastmoneySource:
     name = "eastmoney"
 
     def __init__(self, http: HttpClient) -> None:
         self.http = http
         self.last_host = _HOSTS[0]
+
+    # ---------------- 全市场个股 ----------------
+    def all_stocks(self, *, page_size: int = 100) -> list[StockQuote]:
+        """批量拉全市场个股快照（约 5900 只，60 页）。
+
+        注意：`fs` 参数含 `+`（东财的分隔符），**不能交给 requests 编码**，
+        否则 `+` → `%2B`，东财会拒绝。所以 query 手工拼接。
+        """
+        from urllib.parse import urlencode
+
+        out: list[StockQuote] = []
+        page = 1
+        while True:
+            qs = urlencode({
+                "pn": page, "pz": page_size, "po": 1, "np": 1,
+                "fltt": 2, "invt": 2, "fid": "f3",
+            })
+            path = (f"/api/qt/clist/get?{qs}&fs={_STOCK_FS}&fields={_STOCK_FIELDS}")
+            f = self.http.get_with_fallback(_QUOTE_HOSTS, path)
+            self.last_host = f.host
+            data = (f.json() or {}).get("data") or {}
+            diff = data.get("diff") or []
+            for r in diff:
+                out.append(StockQuote(
+                    stock_code=str(r.get("f12") or ""),
+                    name=str(r.get("f14") or ""),
+                    close=_f(r.get("f2")),
+                    pct_chg=_f(r.get("f3")),
+                    amount=_f(r.get("f6")),
+                    turnover=_f(r.get("f8")),
+                    pe_ttm=_num_or_none(r.get("f115")),
+                    pb=_num_or_none(r.get("f23")),
+                    total_mcap=_f(r.get("f20")),
+                    float_mcap=_f(r.get("f21")),
+                ))
+            total = int(data.get("total") or 0)
+            if not diff or page * page_size >= total:
+                break
+            page += 1
+        return out
 
     # ---------------- 涨跌停池 ----------------
     def limit_pool(self, trade_date: str, pool_type: str = "up") -> list[PoolStock]:

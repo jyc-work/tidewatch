@@ -4,6 +4,7 @@ site:
   tagline: China A-Share Market Atlas
 nav:
   sectors: Sectors
+  stocks: Stocks
   people: Smart Money
   radar: Flow Radar
   lab: Lab
@@ -14,6 +15,11 @@ index:
 sectors:
   title: Sector Atlas
   subtitle: Sorted by turnover · updated after each trading day's close
+  scope_label: Scope
+  scope_industry: All industry sectors
+  scope_concept: Concept sectors
+  scope_concept_note: (top 100 by net capital inflow)
+  scope_total: Total
   col:
     code: Code
     name: Sector
@@ -81,3 +87,23 @@ radar:
     ladder: Boards
     industry: Industry
   note: This is a limit-up/down snapshot, not classic money flow; not investment advice
+
+stocks:
+  title: Stock Research
+  subtitle: Sorted by turnover · close snapshot
+  col:
+    name: Name
+    code: Code
+    close: Last
+    pct: Change
+    amount: Turnover (100M)
+    turnover: Turnover Rate
+    pe: PE (TTM)
+    pb: PB
+    mcap: Market Cap (100M)
+  detail:
+    back: ← Back to Stock Research
+    valuation: Valuation
+    metrics: Quotes
+    na: Loss / n/a
+  note: Close snapshot, not real-time quotes; not investment advice

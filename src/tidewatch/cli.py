@@ -56,6 +56,14 @@ def cmd_run(args) -> int:
         print(f"status={result['status']} records={result['written']} by_pool={result['by_pool']}")
         return 0 if result["status"] in ("success", "skipped") else 1
 
+    if args.stage == "stocks":
+        from .pipeline.stocks import run_stocks
+        print(f"stage=stocks target={resolve_target_date(args.date)}")
+        result = run_stocks(store, http, trade_date=args.date, force=args.force)
+        store.close()
+        print(f"status={result['status']} records={result['written']}")
+        return 0 if result["status"] in ("success", "skipped") else 1
+
     sample = cfg.get("sample", {})
     if args.all or args.top:
         # 从列表页发现板块（--top N 取前 N，概念已按资金净流入排序）
@@ -116,7 +124,8 @@ def cmd_render(args) -> int:
     d = resolve_target_date(args.date)
     locales = SUPPORTED if args.lang == "all" else (args.lang,)
     out_new = resolve(args.out)
-    builder = SiteBuilder(store, out_new, base_url=args.base_url, base_path=args.base_path)
+    builder = SiteBuilder(store, out_new, base_url=args.base_url,
+                          base_path=args.base_path, top_stocks=args.top_stocks)
     res = builder.build(d, locales)
     print(f"built {res['pages']} pages -> {res['out']} (locales={','.join(locales)})")
 
@@ -143,7 +152,8 @@ def main(argv: list[str] | None = None) -> int:
     sub = p.add_subparsers(dest="cmd", required=True)
 
     r = sub.add_parser("run", help="执行数据管道")
-    r.add_argument("--stage", default="sectors", choices=["sectors", "lhb", "radar"])
+    r.add_argument("--stage", default="sectors",
+                   choices=["sectors", "lhb", "radar", "stocks"])
     r.add_argument("--category", default="industry", choices=["industry", "concept"])
     r.add_argument("--date", help="目标交易日 YYYY-MM-DD（默认最近已收盘交易日）")
     r.add_argument("--codes", help="逗号分隔的板块代码，覆盖 config.sample")
@@ -165,6 +175,8 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--base-path", default="", help="子路径前缀（GitHub Pages 项目站点用 /<repo>）")
     b.add_argument("--publish", action="store_true", help="构建后原子发布到 dist/")
     b.add_argument("--min-pages", type=int, default=6, help="发布守门的页面数下限")
+    b.add_argument("--top-stocks", type=int, default=300,
+                   help="生成个股详情页的数量（按成交额 Top N）")
     b.set_defaults(func=cmd_render)
 
     g = sub.add_parser("pages", help="统计目录下的 html 页面数")

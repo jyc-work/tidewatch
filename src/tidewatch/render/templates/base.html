@@ -14,12 +14,13 @@
 <header class="site">
   <a class="brand" href="{{ prefix }}/">{{ t["site.name"] }}<span>{{ t["site.tagline"] }}</span></a>
   <nav class="main">
-    <a href="{{ prefix }}/sectors/" class="active">{{ t["nav.sectors"] }}</a>
-    <a href="{{ prefix }}/people/">{{ t["nav.people"] }}</a>
-    <a href="{{ prefix }}/radar/">{{ t["nav.radar"] }}</a>
+    <a href="{{ prefix }}/sectors/"{% if current == "sectors" %} class="active"{% endif %}>{{ t["nav.sectors"] }}</a>
+    <a href="{{ prefix }}/stocks/"{% if current == "stocks" %} class="active"{% endif %}>{{ t["nav.stocks"] }}</a>
+    <a href="{{ prefix }}/people/"{% if current == "people" %} class="active"{% endif %}>{{ t["nav.people"] }}</a>
+    <a href="{{ prefix }}/radar/"{% if current == "radar" %} class="active"{% endif %}>{{ t["nav.radar"] }}</a>
   </nav>
   <span class="spacer"></span>
-  <a class="lang-switch" href="{{ alt_url }}">{{ t["footer.switch"] }}</a>
+  {% if show_lang_switch %}<a class="lang-switch" href="{{ alt_url }}">{{ t["footer.switch"] }}</a>{% endif %}
 </header>
 
 <main>
@@ -31,5 +32,6 @@
   <div>{{ t["footer.snapshot"] }}: {{ trade_date }}</div>
   <div class="disc">{{ t["footer.disclaimer"] }}</div>
 </footer>
+<script src="{{ base_path }}/assets/sort.js" defer></script>
 </body>
 </html>
