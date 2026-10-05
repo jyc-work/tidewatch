@@ -128,3 +128,9 @@ table.data th[data-dir="desc"]:hover { color: var(--fg); }
 .seat-northbound  { color: #2ebd85; border-color: #14453a; }
 .seat-institution { color: #a78bfa; border-color: #3b2f63; }
 .seat-unknown     { color: var(--fg-mute); }
+
+/* 长表格渲染优化：跳过屏幕外行的布局/绘制（首屏更快） */
+table.data tbody tr {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 34px;
+}

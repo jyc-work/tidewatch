@@ -30,6 +30,28 @@ _SEATS_YAML = _HERE.parents[2] / "mapping" / "seats.yaml"
 STAGE_CLS = {"持续领涨": "s1", "高位回落": "s2", "超跌反弹": "s3", "持续走弱": "s4"}
 
 
+def _minify_html(html: str) -> str:
+    """去掉标签间空白与缩进（可减 15-30% 体积）。
+
+    安全措施：先保护 <script>/<style>/<pre>/<textarea> 内容，
+    再压缩，最后还原——避免破坏内嵌代码里的空白语义。
+    """
+    saved: list[str] = []
+
+    def _stash(m: re.Match) -> str:
+        saved.append(m.group(0))
+        return f"\x00{len(saved) - 1}\x00"
+
+    tmp = re.sub(r"<(script|style|pre|textarea)\b[^>]*>.*?</\1>", _stash, html,
+                 flags=re.S | re.I)
+    tmp = re.sub(r">\s+<", "><", tmp)
+    tmp = re.sub(r"\n\s*", "", tmp)
+    tmp = re.sub(r"\s{2,}", " ", tmp)
+    for i, s in enumerate(saved):
+        tmp = tmp.replace(f"\x00{i}\x00", s)
+    return tmp
+
+
 def _load_seat_meta() -> dict[str, dict]:
     """从 mapping/seats.yaml 读席位元信息（别名/分类/风格/介绍）。"""
     if not _SEATS_YAML.exists():
@@ -304,7 +326,8 @@ class SiteBuilder:
 
     def _render(self, template: str, out_path: Path, ctx: dict) -> None:
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(self.env.get_template(template).render(**ctx), encoding="utf-8")
+        html = self.env.get_template(template).render(**ctx)
+        out_path.write_text(_minify_html(html), encoding="utf-8")
 
     # ---------------- 构建 ----------------
     def build(self, trade_date: str, locales: tuple[str, ...] = SUPPORTED) -> dict:
