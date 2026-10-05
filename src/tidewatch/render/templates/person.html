@@ -2,7 +2,10 @@
 {% block content %}
 <p class="subtitle"><a href="{{ prefix }}/people/">{{ t["people.detail.back"] }}</a></p>
 <h1>{{ s.name }}</h1>
-<p class="subtitle">{{ s.full_name }}{% if s.alias %} · {{ s.code }}{% endif %}</p>
+<p class="subtitle">
+  {{ s.full_name }}
+  <span class="seat-tag {{ s.cls_css }}">{{ s.cls_text }}</span>
+</p>
 
 <div class="card">
   <div class="metrics">
@@ -10,9 +13,38 @@
       <div class="v">{{ s.buy_text }}</div></div>
     <div class="metric"><div class="k">{{ t["people.detail.sell"] }}</div>
       <div class="v">{{ s.sell_text }}</div></div>
+    <div class="metric"><div class="k">{{ t["people.col.net"] }}</div>
+      <div class="v {{ s.net_cls }}">{{ s.net_text }}</div></div>
     <div class="metric"><div class="k">{{ t["people.detail.records"] }}</div>
       <div class="v">{{ s.records }}</div></div>
   </div>
+</div>
+
+<div class="card">
+  <h2>{{ t["people.detail.about"] }}</h2>
+  {% if s.intro %}
+  <p>{{ s.intro }}</p>
+  {% else %}
+  <p class="subtitle">{{ t["people.detail.no_intro"] }}</p>
+  {% endif %}
+
+  {% if s.tags %}
+  <h2 style="margin-top:20px">{{ t["people.detail.style"] }}</h2>
+  <p>{% for tag in s.tags %}<span class="seat-tag">{{ tag }}</span> {% endfor %}</p>
+  {% endif %}
+
+  <h2 style="margin-top:20px">{{ t["people.detail.evidence"] }}</h2>
+  <table class="data">
+    <tbody>
+      <tr><td>{{ t["people.detail.identity"] }}</td>
+          <td>{{ s.identity_evidence or "-" }}</td></tr>
+      <tr><td>{{ t["people.detail.confidence"] }}</td>
+          <td>{{ s.confidence or "-" }}</td></tr>
+      <tr><td>activity</td><td>{{ s.activity_evidence or "-" }}</td></tr>
+      <tr><td>code</td><td class="code">{{ s.code }}</td></tr>
+    </tbody>
+  </table>
+  <p class="subtitle" style="margin-top:12px">{{ t["people.note"] }}</p>
 </div>
 
 <div class="card">
@@ -35,6 +67,5 @@
   {% else %}
   <p class="subtitle">{{ t["people.detail.nostocks"] }}</p>
   {% endif %}
-  <p class="subtitle" style="margin-top:14px">{{ t["people.note"] }}</p>
 </div>
 {% endblock %}

@@ -110,3 +110,21 @@ table.data th[data-dir] { color: var(--fg); }
 table.data th[data-dir="asc"]:hover,
 table.data th[data-dir="desc"]:hover { color: var(--fg); }
 .sort-mark { color: var(--accent); font-size: 11px; margin-left: 2px; }
+
+/* 席位类型标签 */
+.seat-tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 1px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+.seat-hot_money   { color: #f0524d; border-color: #59211f; }
+.seat-quant_like  { color: #5aa9e6; border-color: #173a57; }
+.seat-foreign     { color: #e0a34a; border-color: #5a4218; }
+.seat-northbound  { color: #2ebd85; border-color: #14453a; }
+.seat-institution { color: #a78bfa; border-color: #3b2f63; }
+.seat-unknown     { color: var(--fg-mute); }

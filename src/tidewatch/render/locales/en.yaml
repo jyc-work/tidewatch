@@ -5,7 +5,7 @@ site:
 nav:
   sectors: Sectors
   stocks: Stocks
-  people: Smart Money
+  people: Seats
   radar: Flow Radar
   lab: Lab
 index:
@@ -50,15 +50,23 @@ footer:
   switch: 中文
 
 people:
-  title: Hot-Money Seats
-  subtitle: Daily dragon-tiger list seat ranking · from public disclosures
+  title: Seat Activity
+  subtitle: Dragon-tiger list seat ranking · from public disclosures
   col:
     seat: Seat
+    type: Type
     buy: Buy (100M)
     sell: Sell (100M)
     net: Net (100M)
     records: Appearances
-  note: A seat is not a specific person; aliases come from community discussion, unverified
+  note: A seat is not a specific person; types are behavior-based inference; aliases come from community discussion, all unverified
+  cls:
+    hot_money: Hot Money
+    quant_like: Quant-like
+    foreign: Foreign
+    northbound: Northbound
+    institution: Institution
+    unknown: Other
   detail:
     back: ← Back to seats
     today: Today
@@ -68,6 +76,14 @@ people:
     stocks: Related Stocks
     nostocks: No stock detail yet
     nomapping: This seat is not yet in the community alias mapping
+    about: About
+    style: Trading Style
+    evidence: Evidence
+    identity: Identity
+    confidence: Confidence
+    no_intro: No profile for this seat yet. Types are inferred from public trading data and do not represent identity.
+    inferred: Classified as "{cls}" based on public trading data; style tags below. Behavior-based inference, not identity.
+    unclassified: Unclassified seat (appearance evidence only, no identity/style inference)
 
 radar:
   title: Flow Radar

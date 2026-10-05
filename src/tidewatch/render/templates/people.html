@@ -8,6 +8,7 @@
   <thead>
     <tr>
       <th>{{ t["people.col.seat"] }}</th>
+      <th>{{ t["people.col.type"] }}</th>
       <th>{{ t["people.col.buy"] }}</th>
       <th>{{ t["people.col.sell"] }}</th>
       <th>{{ t["people.col.net"] }}</th>
@@ -18,6 +19,7 @@
   {% for s in seats %}
     <tr>
       <td><a href="{{ prefix }}/people/{{ s.code }}/">{{ s.name }}</a></td>
+      <td><span class="seat-tag {{ s.cls_css }}">{{ s.cls_text }}</span></td>
       <td class="num">{{ s.buy_text }}</td>
       <td class="num">{{ s.sell_text }}</td>
       <td class="num {{ s.net_cls }}">{{ s.net_text }}</td>

@@ -11,6 +11,7 @@
 """
 from __future__ import annotations
 
+import re
 import shutil
 from pathlib import Path
 
@@ -29,20 +30,68 @@ _SEATS_YAML = _HERE.parents[2] / "mapping" / "seats.yaml"
 STAGE_CLS = {"持续领涨": "s1", "高位回落": "s2", "超跌反弹": "s3", "持续走弱": "s4"}
 
 
-def _load_seat_aliases() -> dict[str, str]:
-    """从 mapping/seats.yaml 读走席位别名（仅展示用，不声称身份）。"""
+def _load_seat_meta() -> dict[str, dict]:
+    """从 mapping/seats.yaml 读席位元信息（别名/分类/风格/介绍）。"""
     if not _SEATS_YAML.exists():
         return {}
     try:
         data = yaml.safe_load(_SEATS_YAML.read_text(encoding="utf-8")) or {}
     except Exception:
         return {}
-    out: dict[str, str] = {}
+    out: dict[str, dict] = {}
     for s in data.get("seats", []):
-        code, alias = s.get("operatedept_code"), s.get("alias")
-        if code and alias:
-            out[str(code)] = alias
+        code = s.get("operatedept_code")
+        if code:
+            out[str(code)] = s
     return out
+
+
+# ----------------------------------------------------------------
+# 席位自动分类（行为特征推断，非身份认定）
+# 仅基于可观察特征：名称关键词 + 当日买卖结构。
+# 无法判定一律返回 unknown，不臆造。
+# ----------------------------------------------------------------
+_QUANT_NUM = re.compile(r"总部|分公司\b")
+
+
+def classify_seat(name: str, buy: float, sell: float, records: int,
+                  *, manual: str | None = None) -> str:
+    """返回 hot_money / quant_like / foreign / northbound / institution / unknown。
+
+    manual（来自 seats.yaml）优先，其次按规则推断。
+
+    原则：**宁可标 unknown，不可滥标**。把普通营业部说成「游资」是误导，
+    所以游资规则要求「单向明显 + 有规模 + 上榜不频繁」。
+    """
+    if manual:
+        return manual
+    n = name or ""
+    if "沪股通" in n or "深股通" in n:
+        return "northbound"
+    if "机构专用" in n:
+        return "institution"
+    if any(k in n for k in ("高盛", "瑞银", "摩根", "摩根大通", "摩根士丹利",
+                            "美林", "德意志", "野村", "汇丰", "花旗")):
+        return "foreign"
+
+    total = buy + sell
+    if total <= 0:
+        return "unknown"
+    balance = abs(buy - sell) / total        # 0 = 完全均衡，1 = 完全单向
+    peak = max(buy, sell)
+
+    # 量化特征：买卖接近均衡 + 上榜频繁
+    if records >= 20 and balance < 0.15:
+        return "quant_like"
+    if records >= 30 and balance < 0.30:
+        return "quant_like"
+    if "总部" in n:
+        return "quant_like"
+
+    # 游资特征（严格）：单向明显 + 有规模（>= 5000 万）+ 上榜不频繁
+    if records <= 20 and balance > 0.70 and peak >= 5e7:
+        return "hot_money"
+    return "unknown"
 
 
 def _cls(v: float | None) -> str:
@@ -130,7 +179,7 @@ class SiteBuilder:
 
     # ---------------- 游资席位 ----------------
     def _people_rows(self, trade_date: str, i18n: I18n) -> list[dict]:
-        aliases = _load_seat_aliases()
+        meta = _load_seat_meta()
         rows = self.store.conn.execute(
             "SELECT r.operatedept_code code, s.seat_name name, "
             "SUM(CASE WHEN r.side='buy' THEN r.amount ELSE 0 END) buy, "
@@ -142,16 +191,33 @@ class SiteBuilder:
         ).fetchall()
         out = []
         for r in rows:
-            buy = (r["buy"] or 0) / 1e8
-            sell = (r["sell"] or 0) / 1e8
+            raw_buy = r["buy"] or 0
+            raw_sell = r["sell"] or 0
+            buy, sell = raw_buy / 1e8, raw_sell / 1e8
             net = buy - sell
-            alias = aliases.get(str(r["code"]), "")
-            full = r["name"] or r["code"]
+            code = str(r["code"])
+            m = meta.get(code, {})
+            alias = m.get("alias", "")
+            full = r["name"] or code
+            cls = classify_seat(full, raw_buy, raw_sell, r["n"],
+                                manual=m.get("classification"))
             out.append({
-                "code": r["code"],
+                "code": code,
                 "name": alias or full,          # 列表页优先显示社区别名
                 "full_name": full,
                 "alias": alias,
+                "cls": cls,
+                "cls_text": i18n.t(f"people.cls.{cls}"),
+                "cls_css": f"seat-{cls}",
+                "intro": m.get("note") or (
+                    i18n.t("people.detail.inferred", cls=i18n.t(f"people.cls.{cls}"))
+                    if m.get("tags") else ""
+                ),
+                "tags": m.get("tags") or [],
+                "note": m.get("note", ""),
+                "confidence": m.get("confidence", ""),
+                "identity_evidence": m.get("identity_evidence", ""),
+                "activity_evidence": m.get("activity_evidence", ""),
                 "buy_text": f"{buy:.2f}",
                 "sell_text": f"{sell:.2f}",
                 "net_text": f"{net:+.2f}",

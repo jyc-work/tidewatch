@@ -5,7 +5,7 @@ site:
 nav:
   sectors: 板块图谱
   stocks: 个股
-  people: 聪明钱
+  people: 席位动向
   radar: 资金雷达
   lab: 实验室
 index:
@@ -50,17 +50,25 @@ footer:
   switch: English
 
 people:
-  title: 游资席位
-  subtitle: 当日龙虎榜席位买卖排行 · 数据来自公开披露
+  title: 席位动向
+  subtitle: 龙虎榜席位买卖排行 · 数据来自公开披露
   col:
     seat: 席位
+    type: 类型
     buy: 买入(亿)
     sell: 卖出(亿)
     net: 净额(亿)
     records: 上榜次数
-  note: 席位≠特定自然人；别名来自社区讨论，未经证实
+  note: 席位≠特定自然人；类型为行为特征推断，别名来自社区讨论，均未经证实
+  cls:
+    hot_money: 游资
+    quant_like: 量化
+    foreign: 外资
+    northbound: 北向
+    institution: 机构
+    unknown: 其他
   detail:
-    back: ← 返回游资席位
+    back: ← 返回席位动向
     today: 当日
     buy: 买入
     sell: 卖出
@@ -68,6 +76,14 @@ people:
     stocks: 相关个股
     nostocks: 暂无个股明细
     nomapping: 该席位尚未纳入社区别名映射
+    about: 席位介绍
+    style: 交易风格
+    evidence: 证据
+    identity: 身份
+    confidence: 置信度
+    no_intro: 该席位暂未收录介绍。类型为基于公开交易数据的推断，不代表真实身份。
+    inferred: 该席位按公开交易数据归类为「{cls}」，交易风格见下。类型为行为特征推断，不代表真实身份。
+    unclassified: 未分类席位（仅出现证据，无身份/风格推断）
 
 radar:
   title: 资金雷达
